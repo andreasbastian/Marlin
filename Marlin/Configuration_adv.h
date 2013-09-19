@@ -51,9 +51,9 @@
 //#define EXTRUDER_RUNOUT_PREVENT  
 #define EXTRUDER_RUNOUT_MINTEMP 190  
 #define EXTRUDER_RUNOUT_SECONDS 30.
-#define EXTRUDER_RUNOUT_ESTEPS 14. //mm filament
+#define EXTRUDER_RUNOUT_ESTEPS 10000. //mm filament //AB 9/18
 #define EXTRUDER_RUNOUT_SPEED 1500.  //extrusion speed
-#define EXTRUDER_RUNOUT_EXTRUDE 100
+#define EXTRUDER_RUNOUT_EXTRUDE 10000 //AB 9/18
 
 //These defines help to calibrate the AD595 sensor in case you get wrong temperature measurements.
 //The measured temperature is defined as "actualTemp = (measuredTemp * TEMP_SENSOR_AD595_GAIN) + TEMP_SENSOR_AD595_OFFSET"
