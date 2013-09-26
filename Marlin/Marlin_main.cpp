@@ -145,6 +145,10 @@
 // M928 - Start SD logging (M928 filename.g) - ended by M29
 // M999 - Restart after being stopped by error
 
+//AB 9/26:
+//M700 - Map extruder step and dir pins to old XY pins to prevent pistons from moving during layer printing
+//M701 - Restore extruder step and dir control pins to defaults to run pistons
+
 //Stepper Movement Variables
 
 //===========================================================================
@@ -1857,6 +1861,36 @@ void process_commands()
       gcode_LastN = Stopped_gcode_LastN;
       FlushSerialRequestResend();
     break;
+    
+    
+    
+    //AB 9/26 custom M codes:
+    case 700: //M700 - disable extruder motors to allow PWM pulsing of the laser using the ESTEP pin
+       digitalWrite(Y_ENABLE_PIN, LOW);
+       digitalWrite(E0_ENABLE_PIN,LOW);
+       digitalWrite(E1_ENABLE_PIN,LOW);
+
+    break;
+    
+    case 701: //M701 - Re-enable for layer change actuation
+        digitalWrite(Y_ENABLE_PIN, HIGH);
+        digitalWrite(E0_ENABLE_PIN,HIGH);
+        digitalWrite(E1_ENABLE_PIN,HIGH);
+    break;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     }
   }
 
@@ -1903,7 +1937,7 @@ void process_commands()
       SERIAL_PROTOCOLLN((int)active_extruder);
     }
   }
-
+  
   else
   {
     SERIAL_ECHO_START;

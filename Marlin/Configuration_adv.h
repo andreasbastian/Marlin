@@ -76,7 +76,7 @@
 //===========================================================================
 
 // This defines the number of extruders
-#define EXTRUDERS 1
+#define EXTRUDERS 2 //CHANGED FROM 1 AB 9/26
 
 // #define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
 

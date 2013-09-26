@@ -296,15 +296,15 @@ const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of t
 
 
 // ChenBot mods by jmil
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {4000/25.4, 4000/25.4, 4000/25.4, 1380/4}
-#define DEFAULT_MAX_FEEDRATE          {165, 165, 50, 200000}    // (mm/sec)    
-#define DEFAULT_MAX_ACCELERATION      {5000,5000,5000,500}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves 
-#define DEFAULT_RETRACT_ACCELERATION  3000   // X, Y, Z and E max acceleration in mm/s^2 for r retracts
-//
-#define DEFAULT_XYJERK                20.0    // (mm/sec)
-#define DEFAULT_ZJERK                 20.0     // (mm/sec)
-#define DEFAULT_EJERK                 5.0    // (mm/sec)
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {4000/25.4, 4000/25.4, 4000/25.4, 1380/4}
+//#define DEFAULT_MAX_FEEDRATE          {165, 165, 50, 200000}    // (mm/sec)    
+//#define DEFAULT_MAX_ACCELERATION      {5000,5000,5000,500}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
+//#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves 
+//#define DEFAULT_RETRACT_ACCELERATION  3000   // X, Y, Z and E max acceleration in mm/s^2 for r retracts
+////
+//#define DEFAULT_XYJERK                20.0    // (mm/sec)
+//#define DEFAULT_ZJERK                 20.0     // (mm/sec)
+//#define DEFAULT_EJERK                 5.0    // (mm/sec)
 
 // SLS Mods by Andreas 9/18
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {167.20882, 167.20882, 4000/25.4, 1380/4}
