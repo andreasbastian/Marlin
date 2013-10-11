@@ -1864,18 +1864,23 @@ void process_commands()
     
     
     
-    //AB 9/26 custom M codes:
-    case 700: //M700 - disable extruder motors to allow PWM pulsing of the laser using the ESTEP pin
-       digitalWrite(Y_ENABLE_PIN, LOW);
-       digitalWrite(E0_ENABLE_PIN,LOW);
-       digitalWrite(E1_ENABLE_PIN,LOW);
+    //andreas bastian custom M codes for laser adn powder hardware control:
+    case 700: //M700 INITIATE LAYER CHANGE CODE ON SLAVED ARDUINO
+    //run a line from HEATER_2_PIN to a digital I/O pin on the slaved arduino, which will be quietly waiting
+    //to 
+       digitalWrite(HEATER_2_PIN,HIGH);
+       delay(50);//make sure that the pin is good and HIGH, then turn off:
+       digitalWrite(HEATER_2_PIN,LOW);
 
     break;
     
-    case 701: //M701 - Re-enable for layer change actuation
-        digitalWrite(Y_ENABLE_PIN, HIGH);
-        digitalWrite(E0_ENABLE_PIN,HIGH);
-        digitalWrite(E1_ENABLE_PIN,HIGH);
+    case 701: //M701 SET LASER POWER
+        //implement with board to board serial comms after establishing motion control
+        if (code_seen('S')){
+             //<laserPower>=constrain(code_value(),0,255);
+             //send <laserPower> over serial comms to slave arduino
+             //wait for ack?
+          }
     break;
     
     
