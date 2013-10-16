@@ -22,15 +22,15 @@ int getPWMval(int pwmInput)
 {
   int cycleHigh = pulseIn(pwmInput, HIGH);
   int cycleLow = pulseIn(pwmInput, LOW);
-
-  Serial.print("cycleHigh = ");
-  Serial.print(cycleHigh);
-  Serial.print(", cycleLow = ");
-  Serial.print(cycleLow);
-  Serial.print(", and ratio is ");
-  int val = map(cycleHigh,0,cycleLow+cycleHigh,0,255);
-  Serial.println(val);
-  Serial.println();  
+  return map(cycleHigh,0,cycleLow+cycleHigh,0,255);
+//  Serial.print("cycleHigh = ");
+//  Serial.print(cycleHigh);
+//  Serial.print(", cycleLow = ");
+//  Serial.print(cycleLow);
+//  Serial.print(", and ratio is ");
+//  int val = map(cycleHigh,0,cycleLow+cycleHigh,0,255);
+//  Serial.println(val);
+//  Serial.println();  
   
   
   

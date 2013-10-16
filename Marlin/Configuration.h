@@ -226,7 +226,7 @@
 const bool X_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. //AB 9/17
 const bool Y_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. //AB 9/17
 const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. 
-//#define DISABLE_MAX_ENDSTOPS
+#define DISABLE_MAX_ENDSTOPS //AB 10/14
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 #define X_ENABLE_ON 1 //AB 9/17

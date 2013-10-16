@@ -1483,6 +1483,10 @@
 #error Oops!  Make sure you have 'Arduino Mega 2560' selected from the 'Tools -> Boards' menu.
 #endif
 
+
+//#define LASER_PWM_PIN 5 //try routing the PWM off a PWM EXT pin instead of through a MOSFET
+//10/14-- WORKS!! transfer to BARICUDA infrastructure
+
 #define LARGE_FLASH true
 
 // jmil changed for ChenBot ShopBot Desktop D2418 for using RAMBO MotorEXT pins
@@ -1506,7 +1510,7 @@
 //#define Y_DIR_PIN 49
 #define Y_MIN_PIN 11
 #define Y_MAX_PIN 28 //AB 9/18
-#define Y_ENABLE_PIN 23//AB 9/18
+#define Y_ENABLE_PIN 23 //AB 9/18
 #define Y_MS1_PIN 69
 #define Y_MS2_PIN 39
 
@@ -1528,7 +1532,7 @@
 #define TEMP_1_PIN 1
 
 #ifdef BARICUDA
-#define HEATER_2_PIN 6
+#define HEATER_2_PIN 5 //was 6, changed to 5 (PWM ext pin) for laser control AB 10/14
 #else
 #define HEATER_2_PIN -1
 #endif

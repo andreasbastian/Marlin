@@ -1864,6 +1864,17 @@ void process_commands()
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //andreas bastian custom M codes for laser adn powder hardware control:
     case 700: //M700 INITIATE LAYER CHANGE CODE ON SLAVED ARDUINO
     //run a line from HEATER_2_PIN to a digital I/O pin on the slaved arduino, which will be quietly waiting
@@ -1877,7 +1888,10 @@ void process_commands()
     case 701: //M701 SET LASER POWER
         //implement with board to board serial comms after establishing motion control
         if (code_seen('S')){
-             //<laserPower>=constrain(code_value(),0,255);
+           EtoPPressure=constrain(code_value(),0,255);
+   
+          
+          //analogWrite(HEATER_2_PIN,constrain(code_value(),0,255));
              //send <laserPower> over serial comms to slave arduino
              //wait for ack?
           }
