@@ -1531,6 +1531,8 @@
 #define HEATER_1_PIN 7
 #define TEMP_1_PIN 1
 
+#define LAYER_CHANGE_PIN 13 //Thanks johnnyr!!
+
 #ifdef BARICUDA
 #define HEATER_2_PIN 5 //was 6, changed to 5 (PWM ext pin) for laser control AB 10/14
 #else
