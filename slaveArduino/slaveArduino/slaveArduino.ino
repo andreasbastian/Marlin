@@ -7,13 +7,17 @@ Andreas Bastian, OpenSLS 2013
  */
 
 //define pins for powder distributor, pistons (Z), and laser PWM and EN
-int D_STEP_PIN = 4;
-int D_DIR_PIN = 5;
-int D_EN_PIN = 7;
+int D_DIR_PIN = 2;
+int D_STEP_PIN = 3;
+int D_EN_PIN = 4;
 
-int Z_STEP_PIN = 2;
-int Z_DIR_PIN = 3;
-int Z_EN_PIN = 6;
+int Z_DIR_PIN = 5;
+int Z_STEP_PIN = 6;
+int Z_EN_PIN = 7;
+
+int F_DIR_PIN = 8;
+int F_STEP_PIN = 9;
+int F_EN_PIN = 10;
 
 //int LASER_EN_PIN = 8;
 //int LASER_PWM_PIN = 9;
@@ -150,6 +154,7 @@ void A4988_stepper::STEP()
 
 A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200, 0.25);//z-axis
 A4988_stepper d(D_STEP_PIN, D_DIR_PIN, D_EN_PIN, 80, 30);//distributor
+A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200, 0.25);//feed piston
 
 boolean doABarrelRoll = false;
 int i = 0;
@@ -175,7 +180,10 @@ void loop()
    analogWrite(LASER_PWM_PIN, readVal); //send PWM signal
    */
   //Serial.println(analogRead(LAYER_CHANGE_PIN));
-  doABarrelRoll = checkLayerPin(LAYER_CHANGE_PIN); //is it time to do a layer change?
+  
+  f.enable();
+  f.moveDist(1);
+  //doABarrelRoll = checkLayerPin(LAYER_CHANGE_PIN); //is it time to do a layer change?
   if(doABarrelRoll == true)
   {
 
