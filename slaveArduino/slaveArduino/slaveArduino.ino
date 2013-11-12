@@ -28,6 +28,7 @@ int LAYER_CHANGE_PIN = A0;
 
 
 #include <pins.h>
+#include <math.h>
 #include <SoftwareSerial.h>
 //#include "A4988_stepper.h"
 #include "Arduino.h"
@@ -100,7 +101,7 @@ void A4988_stepper::moveDist(float dist, float velocity)
   stepDelay = 1000000/(_spmm*velocity);
   //1 million microseconds/second divided by [steps/mm*mm/s]=microsceonds
 
-  int numSteps = _spmm*dist;
+  int numSteps = _spmm*fabs(dist);
   setDir(dist);
   while(numSteps != 0)
   {
@@ -112,7 +113,11 @@ void A4988_stepper::moveDist(float dist, float velocity)
 //move motor with last used velocity
 void A4988_stepper::moveDist(float dist)
 {
-  int numSteps = _spmm*abs(dist);
+  int numSteps = _spmm*fabs(dist);
+  Serial.print("dist = ");
+  Serial.println(fabs(dist));
+  Serial.print("steps = ");
+  Serial.println(numSteps);
   setDir(dist);
   while(numSteps != 0)
   {
@@ -180,10 +185,8 @@ void loop()
    analogWrite(LASER_PWM_PIN, readVal); //send PWM signal
    */
   //Serial.println(analogRead(LAYER_CHANGE_PIN));
-  
-  f.enable();
-  f.moveDist(1);
-  //doABarrelRoll = checkLayerPin(LAYER_CHANGE_PIN); //is it time to do a layer change?
+
+  doABarrelRoll = checkLayerPin(LAYER_CHANGE_PIN); //is it time to do a layer change?
   if(doABarrelRoll == true)
   {
 
@@ -209,7 +212,7 @@ void newLayer(float layerHeight)
   //increment z by layer height
   //distribute powder
   //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  
+  f.moveDist(layerHeight*1.2);
   z.moveDist(layerHeight); //decrement z by a layer height and increment feed by 3xlyrHt
   d.enable();
   d.moveDist(270); //distribute powder
@@ -221,7 +224,7 @@ void newLayer(float layerHeight)
 boolean checkLayerPin(int layerPin)
 {
   //Serial.println(analogRead(layerPin));
-  if(analogRead(layerPin) > 210)
+  if(analogRead(layerPin) > 310)
   {
     return true;
   } 
@@ -231,6 +234,17 @@ boolean checkLayerPin(int layerPin)
   }
 }
 
+float fabs(float val)
+{
+  if(val < 0)
+  {
+    return -1*val;
+  }
+  else
+  {
+    return val;
+  }
+}
 
 /*
 
@@ -288,6 +302,7 @@ boolean checkLayerPin(int layerPin)
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
