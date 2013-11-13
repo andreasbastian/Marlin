@@ -27,7 +27,7 @@ int F_EN_PIN = 10;
 int LAYER_CHANGE_PIN = A0;
 
 
-#include <pins.h>
+//#include <pins.h>
 #include <math.h>
 #include <SoftwareSerial.h>
 //#include "A4988_stepper.h"
@@ -114,10 +114,10 @@ void A4988_stepper::moveDist(float dist, float velocity)
 void A4988_stepper::moveDist(float dist)
 {
   int numSteps = _spmm*fabs(dist);
-  Serial.print("dist = ");
-  Serial.println(fabs(dist));
-  Serial.print("steps = ");
-  Serial.println(numSteps);
+  //Serial.print("dist = ");
+  //Serial.println(fabs(dist));
+  //Serial.print("steps = ");
+  //Serial.println(numSteps);
   setDir(dist);
   while(numSteps != 0)
   {
@@ -159,7 +159,7 @@ void A4988_stepper::STEP()
 
 A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200, 0.25);//z-axis
 A4988_stepper d(D_STEP_PIN, D_DIR_PIN, D_EN_PIN, 80, 30);//distributor
-A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200, 0.25);//feed piston
+A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200/3, 0.25);//feed piston
 
 boolean doABarrelRoll = false;
 int i = 0;
@@ -192,7 +192,8 @@ void loop()
 
     digitalWrite(LED,HIGH);
     //GO GO GO!! Roll that barrel!
-    newLayer(0.5);
+    
+    newLayer(0.1);
     doABarrelRoll != doABarrelRoll;//only do one layer
     digitalWrite(LED,LOW);
 
@@ -211,9 +212,12 @@ void newLayer(float layerHeight)
 {
   //increment z by layer height
   //distribute powder
+  
+  
+  
   //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  f.moveDist(layerHeight*1.2);
-  z.moveDist(layerHeight); //decrement z by a layer height and increment feed by 3xlyrHt
+  f.moveDist(layerHeight*1.2);//increment feed by k*layer height
+  z.moveDist(layerHeight); //decrement z by a layer height
   d.enable();
   d.moveDist(270); //distribute powder
   d.moveDist(-270); //return distributor to cubby
@@ -223,8 +227,9 @@ void newLayer(float layerHeight)
 
 boolean checkLayerPin(int layerPin)
 {
+  
   //Serial.println(analogRead(layerPin));
-  if(analogRead(layerPin) > 310)
+  if(analogRead(layerPin) > 1000)
   {
     return true;
   } 
