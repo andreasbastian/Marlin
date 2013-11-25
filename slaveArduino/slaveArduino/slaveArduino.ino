@@ -157,7 +157,7 @@ void A4988_stepper::STEP()
 
 
 
-A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200, 0.25);//z-axis
+A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200/1.25, 0.25);//z-axis
 A4988_stepper d(D_STEP_PIN, D_DIR_PIN, D_EN_PIN, 80, 30);//distributor
 A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200/3, 0.25);//feed piston
 
@@ -192,7 +192,7 @@ void loop()
 
     digitalWrite(LED,HIGH);
     //GO GO GO!! Roll that barrel!
-    
+
     newLayer(0.1);
     doABarrelRoll != doABarrelRoll;//only do one layer
     digitalWrite(LED,LOW);
@@ -212,26 +212,66 @@ void newLayer(float layerHeight)
 {
   //increment z by layer height
   //distribute powder
-  
-  
-  
+
+
+
+
   //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  f.moveDist(layerHeight*1.2);//increment feed by k*layer height
+  //f.moveDist(layerHeight*1.3);//increment feed by k*layer height
   z.moveDist(layerHeight); //decrement z by a layer height
-  d.enable();
-  d.moveDist(270); //distribute powder
-  d.moveDist(-270); //return distributor to cubby
-  d.disable();
+  //d.enable();
+  //d.moveDist(270); //distribute powder
+  //d.moveDist(-270); //return distributor to cubby
+  //d.disable();
 
 }
 
 boolean checkLayerPin(int layerPin)
 {
-  
+
+
   //Serial.println(analogRead(layerPin));
-  if(analogRead(layerPin) > 1000)
+  if(analogRead(layerPin) > 310)
   {
-    return true;
+    //layerPin is high, but make sure that it's not noise:
+    //make sure that it stays high for 400ms (value determined by watching noise
+    //signals on the o-scope)
+    int now = millis();
+    int later;
+
+    if(analogRead(layerPin) > 310)
+    {
+      //suuuuuuuuuper hacky implementation. But it works.
+      int wait = 400;
+      while(wait != 0)
+      {
+        wait--;
+        delay(1);
+        if(analogRead(layerPin) < 310)
+        {
+          return false; 
+        }
+
+      }
+      //check again:
+      if(analogRead(layerPin > 310))
+      {
+        return true;
+      } 
+    }
+    /* //though I think is cleaner implementation, it doesn't
+    //seem to catch two successive pulses and still misfires 
+    //when the RAMBO resets.
+    while(analogRead(layerPin) > 310)
+     {
+     //measure duration of high signal
+     later = millis(); 
+     }
+     if(later-now >= 400)
+     {
+     return true;
+     }
+     */
   } 
   else
   {
@@ -307,6 +347,10 @@ float fabs(float val)
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 
