@@ -216,13 +216,13 @@ void newLayer(float layerHeight)
 
 
 
-  //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  //f.moveDist(layerHeight*1.3);//increment feed by k*layer height
+  analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
+  f.moveDist(layerHeight*1.3);//increment feed by k*layer height
   z.moveDist(layerHeight); //decrement z by a layer height
-  //d.enable();
-  //d.moveDist(270); //distribute powder
-  //d.moveDist(-270); //return distributor to cubby
-  //d.disable();
+  d.enable();
+  d.moveDist(270); //distribute powder
+  d.moveDist(-270); //return distributor to cubby
+  d.disable();
 
 }
 
