@@ -157,9 +157,9 @@ void A4988_stepper::STEP()
 
 
 
-A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200/1.25, 0.25);//z-axis
+A4988_stepper z(Z_STEP_PIN, Z_DIR_PIN, Z_EN_PIN, 3200, 2.5);//z-axis 3200/1.25 for r1 hdwr
 A4988_stepper d(D_STEP_PIN, D_DIR_PIN, D_EN_PIN, 80, 30);//distributor
-A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200/3, 0.25);//feed piston
+A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200/1.25, 2.5);//feed piston 3200/1.25 for r1 hdwr
 
 boolean doABarrelRoll = false;
 int i = 0;
@@ -193,7 +193,7 @@ void loop()
     digitalWrite(LED,HIGH);
     //GO GO GO!! Roll that barrel!
 
-    newLayer(0.1);
+    newLayer(0.2);//specify layer height here in mm
     doABarrelRoll != doABarrelRoll;//only do one layer
     digitalWrite(LED,LOW);
 
@@ -216,12 +216,12 @@ void newLayer(float layerHeight)
 
 
 
-  analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  f.moveDist(layerHeight*1.3);//increment feed by k*layer height
+  //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
+  f.moveDist(layerHeight*1.5);//increment feed by k*layer height
   z.moveDist(layerHeight); //decrement z by a layer height
   d.enable();
-  d.moveDist(270); //distribute powder
-  d.moveDist(-270); //return distributor to cubby
+  d.moveDist(240); //distribute powder- 270 for r1 hardware
+  d.moveDist(-240); //return distributor to cubby 27 for r1 hardware
   d.disable();
 
 }
