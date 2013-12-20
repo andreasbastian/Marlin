@@ -162,6 +162,19 @@
 #ifdef SDSUPPORT
 CardReader card;
 #endif
+
+
+
+
+//hacky laser suport!!
+int laserPower = 0; //set this value via the M130 command
+
+
+
+
+
+
+
 float homing_feedrate[] = HOMING_FEEDRATE;
 bool axis_relative_modes[] = AXIS_RELATIVE_MODES;
 int feedmultiply=100; //100->1 200->2
@@ -1229,7 +1242,7 @@ void process_commands()
       #if HEATER_2_PIN > -1
         case 128: //M128 valve open
           if (code_seen('S')){
-             EtoPPressure=constrain(code_value(),0,255);
+             //EtoPPressure=constrain(code_value(),0,255);//commented out AB 12/16
           }
           else {
             EtoPPressure=255;
@@ -1876,6 +1889,11 @@ void process_commands()
     
     
     //andreas bastian custom M codes for laser adn powder hardware control:
+    case 130:
+        if (code_seen('S')){
+           laserPower=constrain(code_value(),0,255);//set laser power here, but don't turn on the laser
+          }
+    break;
     case 700: //M700 INITIATE LAYER CHANGE CODE ON SLAVED ARDUINO
     //run a line from HEATER_1_PIN to a digital I/O pin on the slaved arduino, which will be quietly waiting
        WRITE(LAYER_CHANGE_PIN, HIGH);
@@ -1985,6 +2003,18 @@ void ClearToSend()
   SERIAL_PROTOCOLLNPGM(MSG_OK);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 void get_coordinates()
 {
   bool seen[4]={false,false,false,false};
@@ -2000,16 +2030,35 @@ void get_coordinates()
     next_feedrate = code_value();
     if(next_feedrate > 0.0) feedrate = next_feedrate;
   }
+  
+  //taken out of #ifdef FWRETRACT block:
+   float echange=destination[E_AXIS]-current_position[E_AXIS];
+    //insert laser control code here:
+    if(echange <= 0)
+    {
+        //laser off:
+        EtoPPressure=0;
+    }
+    else
+    {
+      //turn laser on:
+      EtoPPressure=laserPower;  
+    }
+  
+  
+  
   #ifdef FWRETRACT
   if(autoretract_enabled)
   if( !(seen[X_AXIS] || seen[Y_AXIS] || seen[Z_AXIS]) && seen[E_AXIS])
   {
     float echange=destination[E_AXIS]-current_position[E_AXIS];
+    
+    
     if(echange<-MIN_RETRACT) //retract
     {
       if(!retracted)
       {
-
+     
       destination[Z_AXIS]+=retract_zlift; //not sure why chaninging current_position negatively does not work.
       //if slicer retracted by echange=-1mm and you want to retract 3mm, corrrectede=-2mm additionally
       float correctede=-echange-retract_length;
@@ -2021,6 +2070,7 @@ void get_coordinates()
 
     }
     else
+
       if(echange>MIN_RETRACT) //retract_recover
     {
       if(retracted)

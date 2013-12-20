@@ -164,6 +164,8 @@ A4988_stepper f(F_STEP_PIN, F_DIR_PIN, F_EN_PIN, 3200/1.25, 2.5);//feed piston 3
 boolean doABarrelRoll = false;
 int i = 0;
 int LED = 13;
+int layerCount = 0;
+
 
 void setup()
 {
@@ -193,7 +195,7 @@ void loop()
     digitalWrite(LED,HIGH);
     //GO GO GO!! Roll that barrel!
 
-    newLayer(0.2);//specify layer height here in mm
+    newLayer(0.15);//specify layer height here in mm
     doABarrelRoll != doABarrelRoll;//only do one layer
     digitalWrite(LED,LOW);
 
@@ -210,20 +212,39 @@ void loop()
 
 void newLayer(float layerHeight)
 {
-  //increment z by layer height
-  //distribute powder
+  //old way
+  /*
+  f.moveDist(layerHeight*1.2);//increment feed by k*layer height
+   z.moveDist(layerHeight); //decrement z by a layer height
+   d.enable();
+   d.moveDist(240); //distribute powder- 270 for r1 hardware
+   d.moveDist(-240); //return distributor to cubby 27 for r1 hardware
+   d.disable();
+   */
+  //z.moveDist(10);
+  //f.moveDist(3000);
 
-
-
-
-  //analogWrite(LASER_PWM_PIN, 0); //make sure that laser is off
-  f.moveDist(layerHeight*1.5);//increment feed by k*layer height
-  z.moveDist(layerHeight); //decrement z by a layer height
+  //new way:
+  //based on observations of the return sweep of the blade
+  //distrupting the powder surface
+  z.moveDist(layerHeight); //get print plane out of the way
   d.enable();
-  d.moveDist(240); //distribute powder- 270 for r1 hardware
-  d.moveDist(-240); //return distributor to cubby 27 for r1 hardware
+  d.moveDist(-240,90); //return distributor to cubby 27 for r1 hardware
+  if(layerCount <= 2)
+  {
+    f.moveDist(layerHeight*2);//increment feed by k*layer height
+  }
+  else
+  {
+    f.moveDist(layerHeight*1.3);//increment feed by k*layer height
+  }
+  d.moveDist(240,30); //distribute powder- 270 for r1 hardware
   d.disable();
 
+  layerCount++;
+
+  //misc useful code in lieu of better UI (soon):
+  //z.moveDist(-10);
 }
 
 boolean checkLayerPin(int layerPin)
@@ -260,9 +281,9 @@ boolean checkLayerPin(int layerPin)
       } 
     }
     /* //though I think is cleaner implementation, it doesn't
-    //seem to catch two successive pulses and still misfires 
-    //when the RAMBO resets.
-    while(analogRead(layerPin) > 310)
+     //seem to catch two successive pulses and still misfires 
+     //when the RAMBO resets.
+     while(analogRead(layerPin) > 310)
      {
      //measure duration of high signal
      later = millis(); 
@@ -347,6 +368,7 @@ float fabs(float val)
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
